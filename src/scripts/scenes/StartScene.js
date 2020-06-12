@@ -8,7 +8,8 @@ export default class StartScene extends Phaser.Scene {
   }
 
   init() {
-    this.cursors = this.input.keyboard.createCursorKeys()
+    this.cursors = this.input.keyboard.createCursorKeys();
+    this.gameOver = false;
   }
 
   preload() {
@@ -22,6 +23,7 @@ export default class StartScene extends Phaser.Scene {
     this.createPlayer();
 
     this.createStars();
+    this.createBombs();
     this.setLevelCollides();
     this.setOverlaps();
     this.addScore(this);
@@ -29,6 +31,10 @@ export default class StartScene extends Phaser.Scene {
 
   addScore(scene) {
     this.score = new Score(scene)
+  }
+
+  createBombs() {
+    this.bombs = this.physics.add.group()
   }
 
   createStars() {
@@ -58,7 +64,11 @@ export default class StartScene extends Phaser.Scene {
 
   setLevelCollides() {
     this.physics.add.collider(this.player, this.platforms);
+    this.physics.add.collider(this.player, this.bombs, (player, bomb) => {
+      this.player.hitBomb(player, bomb)
+    }, null, this);
     this.physics.add.collider(this.stars, this.platforms);
+    this.physics.add.collider(this.bombs, this.platforms);
   }
 
   setOverlaps() {

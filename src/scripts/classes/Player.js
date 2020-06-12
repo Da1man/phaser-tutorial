@@ -58,7 +58,24 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
   collectStar(player, star) {
     // console.log(player, star)
-    star.disableBody(true, true)
-    this.scene.score.incScore()
+    star.disableBody(true, true);
+    this.scene.score.incScore();
+    if (this.scene.stars.countActive(true) === 0){
+      this.scene.stars.children.iterate(child => {
+        child.enableBody(true, child.x, 0, true, true)
+      })
+      const x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400)
+      const bomb = this.scene.bombs.create(x, 16, 'bomb');
+      bomb.setBounce(1);
+      bomb.setCollideWorldBounds(true);
+      bomb.setVelocity(Phaser.Math.Between(-200, 200), 20)
+    }
+  }
+
+  hitBomb(player, bomb) {
+    this.scene.physics.pause();
+    player.setTint(0xff0000)
+    player.anims.play('turn');
+    this.scene.gameOver = true
   }
 }
