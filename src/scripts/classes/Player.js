@@ -6,9 +6,15 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.scene = scene;
     this.scene.add.existing(this);
     this.scene.physics.add.existing(this);
+    this.setPlayerProps();
+    this.setAnimations();
+    console.log(this, 'Player')
+  }
+
+  setPlayerProps() {
     this.setBounce(0.2);
     this.setCollideWorldBounds(true);
-    this.setAnimations();
+    this.body.setGravityY(600);
   }
 
   setAnimations() {
@@ -31,5 +37,27 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       frameRate: 10,
       repeat: -1,
     });
+  }
+
+  movePlayer() {
+    if (this.scene.cursors.left.isDown) {
+      this.setVelocityX(-160);
+      this.anims.play('left', true);
+    } else if (this.scene.cursors.right.isDown) {
+      this.setVelocityX(160);
+      this.anims.play('right', true);
+    } else {
+      this.setVelocityX(0);
+      this.anims.play('turn')
+    }
+
+    if (this.scene.cursors.up.isDown && this.body.touching.down) {
+      this.setVelocityY(-660);
+    }
+  }
+
+  collectStar(player, star) {
+    // console.log(player, star)
+    star.disableBody(true, true)
   }
 }
