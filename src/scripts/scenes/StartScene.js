@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import Player from "../classes/Player";
+import Score from "../classes/Score";
 
 export default class StartScene extends Phaser.Scene {
   constructor() {
@@ -23,6 +24,11 @@ export default class StartScene extends Phaser.Scene {
     this.createStars();
     this.setLevelCollides();
     this.setOverlaps();
+    this.addScore(this);
+  }
+
+  addScore(scene) {
+    this.score = new Score(scene)
   }
 
   createStars() {

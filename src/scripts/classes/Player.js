@@ -59,5 +59,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   collectStar(player, star) {
     // console.log(player, star)
     star.disableBody(true, true)
+    this.scene.score.incScore()
   }
 }
